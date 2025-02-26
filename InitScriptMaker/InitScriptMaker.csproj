@@ -10,7 +10,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Atlus-Script-Tools\Source\AtlusScriptCompiler\AtlusScriptCompiler.csproj" />
     <ProjectReference Include="..\..\Atlus-Script-Tools\Source\AtlusScriptLibrary\AtlusScriptLibrary.csproj" />
-    <ProjectReference Include="..\..\ShrineFox.IO\ShrineFox.IO.csproj" />
   </ItemGroup>
 
 </Project>

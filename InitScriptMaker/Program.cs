@@ -6,8 +6,8 @@ using AtlusScriptLibrary.FlowScriptLanguage;
 using AtlusScriptLibrary.MessageScriptLanguage.Compiler;
 using AtlusScriptLibrary.MessageScriptLanguage;
 using AtlusScriptLibrary.FlowScriptLanguage.Decompiler;
-using ShrineFox.IO;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace InitScriptMaker
 {
@@ -54,7 +54,7 @@ namespace InitScriptMaker
                     SumBits = true 
                 };
 
-            string tempPath = Path.Combine(Exe.Directory(), "temp.flow");
+            string tempPath = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "temp.flow");
             InitializeScriptCompiler(bfPath, tempPath);
 
             if (File.Exists(tempPath))
