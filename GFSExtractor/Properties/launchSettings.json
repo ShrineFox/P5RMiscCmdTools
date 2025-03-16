@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "GFSExtractor": {
+      "commandName": "Project",
+      "commandLineArgs": "D:\\CPK\\BASE.CPK_unpacked"
+    }
+  }
+}

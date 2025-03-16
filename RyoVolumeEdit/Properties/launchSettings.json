@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RyoVolumeEdit": {
+      "commandName": "Project",
+      "commandLineArgs": "D:\\Games\\Steam\\steamapps\\common\\P5R-etc\\Reloaded\\Mods\\p5rpc.vinesauce\\Ryo"
+    }
+  }
+}
