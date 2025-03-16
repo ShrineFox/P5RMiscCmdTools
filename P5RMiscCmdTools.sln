@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShrineFox.IO", "..\ShrineFo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFDSplitter", "GFDSplitter\GFDSplitter.csproj", "{B930BAFF-608D-4E7D-BB96-74C5F03EBF26}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFDMatFinder", "GFDMatFinder\GFDMatFinder.csproj", "{72F2A652-6F82-4017-8250-B757D9A0A33C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,10 @@ Global
 		{B930BAFF-608D-4E7D-BB96-74C5F03EBF26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B930BAFF-608D-4E7D-BB96-74C5F03EBF26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B930BAFF-608D-4E7D-BB96-74C5F03EBF26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72F2A652-6F82-4017-8250-B757D9A0A33C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72F2A652-6F82-4017-8250-B757D9A0A33C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72F2A652-6F82-4017-8250-B757D9A0A33C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72F2A652-6F82-4017-8250-B757D9A0A33C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
