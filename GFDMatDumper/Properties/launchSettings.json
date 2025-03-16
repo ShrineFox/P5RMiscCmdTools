@@ -2,7 +2,7 @@
   "profiles": {
     "GFDMatDumper": {
       "commandName": "Project",
-      "commandLineArgs": "D:\\CPK\\x_MatDumps\\EPLGAP_Materials"
+      "commandLineArgs": "D:\\CPK\\x_MatDumps\\ExtractedGMDs_FromGMD"
     }
   }
 }
