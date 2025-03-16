@@ -8,17 +8,23 @@ namespace GFDMatDumper
     {
         static void Main(string[] args)
         {
-            List<string> dumpLines = new List<string>();
-            foreach (var yaml in Directory.GetFiles(args[0], "*.yaml", SearchOption.AllDirectories))
-            {
-                dumpLines.Add(File.ReadAllText(yaml) + "\r\n");
-            }
-            File.WriteAllLines("output.txt", dumpLines);
-
-            //DumpMatsFromGMDs(args[0]);
+            DumpMatsFromGMDs(args[0]);
+            //CombineYAMLIntoDump(args[0]);
 
             Console.WriteLine($"Done.");
             Console.ReadKey();
+        }
+
+        private static void CombineYAMLIntoDump(string dirPath)
+        {
+            List<string> dumpLines = new List<string>();
+            foreach (var yaml in Directory.GetFiles(dirPath, "*.yaml", SearchOption.AllDirectories))
+            {
+                foreach (var line in File.ReadAllLines(yaml).Where(x => x.StartsWith("#") || x.StartsWith("Flags:") || x.StartsWith("  GeometryFlags:") || x.StartsWith("  VertexAttributeFlags:")))
+                    dumpLines.Add(line);
+                dumpLines.Add("\r\n");
+            }
+            File.WriteAllLines("output.txt", dumpLines);
         }
 
         private static void DumpMatsFromGMDs(string dirPath)
