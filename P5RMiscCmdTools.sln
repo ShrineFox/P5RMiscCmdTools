@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFDSplitter", "GFDSplitter\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFDMatFinder", "GFDMatFinder\GFDMatFinder.csproj", "{72F2A652-6F82-4017-8250-B757D9A0A33C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFDFldModelUpdater", "GFDFldModelUpdater\GFDFldModelUpdater.csproj", "{F6221653-7303-39EB-35A4-07CC00F40789}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +113,10 @@ Global
 		{72F2A652-6F82-4017-8250-B757D9A0A33C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72F2A652-6F82-4017-8250-B757D9A0A33C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72F2A652-6F82-4017-8250-B757D9A0A33C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6221653-7303-39EB-35A4-07CC00F40789}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6221653-7303-39EB-35A4-07CC00F40789}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6221653-7303-39EB-35A4-07CC00F40789}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6221653-7303-39EB-35A4-07CC00F40789}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
