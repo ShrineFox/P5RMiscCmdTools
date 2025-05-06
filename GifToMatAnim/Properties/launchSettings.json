@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "GifToMatAnim": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Users\\Ryan\\Documents\\wonder4.gif"
+    }
+  }
+}

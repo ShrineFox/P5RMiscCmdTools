@@ -1,7 +1,5 @@
 ﻿using GFDLibrary;
 using GFDLibrary.Models;
-using System.Net.Mail;
-using System.Xml.Linq;
 
 namespace GFDFldModelUpdater
 {
