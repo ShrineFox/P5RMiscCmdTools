@@ -10,7 +10,6 @@ namespace GFDFldModelUpdater
             string ogGFSPath = args[0];
             string editedGFSPath = args[1];
             string outGFSPath = args[2];
-
             string exclusions = "";
 
             if (args.Length == 4)
@@ -20,30 +19,19 @@ namespace GFDFldModelUpdater
             ModelPack editedGFS = Resource.Load<ModelPack>(editedGFSPath);
             ModelPack outGFS = Resource.Load<ModelPack>(editedGFSPath);
 
-            // Remove models from og GFS that are not in editedGFS (or have all their attachments removed)
+            // Remove nodes from og GFS that are not in editedGFS (or have all their attachments removed)
             foreach (var node in ogGFS.Model.Nodes)
             {
-                if (!editedGFS.Model.Nodes.Any(x => x.Name == node.Name) || 
-                    ( editedGFS.Model.Nodes.First(x => x.Name == node.Name).AttachmentCount == 0 
-                        && node.AttachmentCount > 0))
+                if (!editedGFS.Model.Nodes.Any(x => x.Name == node.Name))
                 {
                     outGFS.Model.Nodes.First(x => x.Name == node.Name).Parent.RemoveChildNode(node);
-                    Console.WriteLine($"Removed Node \"{node.Name}\" from GFS", ConsoleColor.Red);
+                    Console.WriteLine($"Removed Node \"{node.Name}\" from GFS (not present in edited GMD)", ConsoleColor.Red);
                 }
             }
 
             // Add models that aren't in og GFS
             foreach (var node in editedGFS.Model.Nodes)
             {
-                // Skip nodes with Camera attachments, properties containing "Cmr", or names in the exclusion list
-                if (node.Attachments.Any(x => x.Type == NodeAttachmentType.Camera) ||
-                    node.Properties.Any(x => x.Key.Contains("Cmr")) ||
-                    (!string.IsNullOrEmpty(exclusions) && exclusions.Split(',').Any(y => node.Name.Contains(y))))
-                {
-                    Console.WriteLine($"Skipping Node \"{node.Name}\"...", ConsoleColor.DarkGray);
-                    continue;
-                }
-
                 var outNode = outGFS.Model.Nodes.FirstOrDefault(x => x.Name == node.Name);
                 var ogNode = ogGFS.Model.Nodes.FirstOrDefault(x => x.Name == node.Name);
 
@@ -53,12 +41,9 @@ namespace GFDFldModelUpdater
                     outGFS.Model.RootNode.AddChildNode(node);
                     Console.WriteLine($"Added Node \"{node.Name}\" to GFS", ConsoleColor.Green);
                 }
-                else if (outNode.HasAttachments
-                    && outNode.Attachments != null
-                    && outNode.Attachments.Where(x => x.Type == NodeAttachmentType.Mesh).Count() != 0)
+                else
                 {
-                    // If node has any mesh attachments...
-                    
+                    // If node exists in the original GFS, get mesh attachments
                     var editedMeshAttachments = node.Attachments
                         .Where(x => x.Type == NodeAttachmentType.Mesh)
                         .ToList();
@@ -80,36 +65,39 @@ namespace GFDFldModelUpdater
                     foreach (var attachment in outMeshAttachments)
                         outMeshes.Add((NodeMeshAttachment)attachment);
 
-                    // Add new mesh attachments with unique material names
-                    foreach (var attachment in editedMeshes)
+                    // Remove meshes with materials marked as "96" in edited GFS, otherwise add meshes marked as "69"
+                    List<string> matsToRemove = new();
+                    if (false)
+                        matsToRemove = new() { "gfdDefaultMat0" };
+                    List<NodeMeshAttachment> newMeshAttachments = new();
+                    // Add new mesh attachments if marked as "69" in the edited GFS
+                    foreach (var attachment in editedMeshes.Where(x => x.Mesh.Field14 == 69))
                     {
-                        var materialName = attachment.Mesh.MaterialName;
-                        if (!ogMeshes.Any(x => x.Mesh.MaterialName == materialName))
+                        newMeshAttachments.Add(attachment);
+                        Console.WriteLine($"Added Mesh Attachment with Material \"{attachment.Mesh.MaterialName}\" to Node \"{node.Name}\"", ConsoleColor.Green);
+                    }
+
+                    // Mark meshes with 96 as "removed" in the edited GFS
+                    foreach (var attachment in editedMeshes.Where(x => x.Mesh.Field14 == 96))
+                    {
+                        matsToRemove.Add(attachment.Mesh.MaterialName);
+                    }
+
+                    // Add original mesh attachments if they are using a material marked for removal
+                    foreach (var mesh in ogMeshAttachments.Where(x => x.Type == NodeAttachmentType.Mesh))
+                    {
+                        var nodeMesh = (NodeMeshAttachment)mesh;
+                        if (!matsToRemove.Any(y => y.Equals(nodeMesh.Mesh.MaterialName)))
                         {
-                            outNode.Attachments.Add(attachment);
-                            Console.WriteLine($"Added Mesh Attachment with Material \"{materialName}\" to Node \"{node.Name}\"", ConsoleColor.Green);
+                            newMeshAttachments.Add(nodeMesh);
+                            Console.WriteLine($"Marked Mesh Attachment with Material \"{nodeMesh.Mesh.MaterialName}\" for removal in Node \"{node.Name}\"", ConsoleColor.Red);
                         }
                     }
 
-                    // Remove mesh attachments with material names that have fewer occurrences in editedGFS
-                    var materialGroups = ogMeshes.GroupBy(x => x.Mesh.MaterialName);
-                    foreach (var group in materialGroups)
-                    {
-                        var materialName = group.Key;
-                        var editedCount = editedMeshes.Count(x => x.Mesh.MaterialName == materialName);
-                        var ogCount = group.Count();
-
-                        if (editedCount < ogCount)
-                        {
-                            foreach (var attachment in ogNode.Attachments)
-                                if (attachment.Type == NodeAttachmentType.Mesh)
-                                {
-                                    var temp = attachment as NodeMeshAttachment;
-                                    if (temp.Mesh.MaterialName == materialName)
-                                        outNode.Attachments.Remove(attachment);
-                                }
-                            Console.WriteLine($"Removed Mesh Attachments with Material \"{materialName}\" from Node \"{node.Name}\"", ConsoleColor.Red);                        }
-                    }
+                    // Remove mesh attachments from final node, re-add eligable attachments
+                    outNode.Attachments = outNode.Attachments.Where(x => x.Type != NodeAttachmentType.Mesh).ToList();
+                    foreach (var mesh in newMeshAttachments)
+                        outNode.Attachments.Add(mesh);
                 }
             }
 
