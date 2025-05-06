@@ -1,5 +1,7 @@
 ﻿using GFDLibrary;
 using GFDLibrary.Models;
+using System.Net.Mail;
+using System.Xml.Linq;
 
 namespace GFDFldModelUpdater
 {
@@ -10,10 +12,6 @@ namespace GFDFldModelUpdater
             string ogGFSPath = args[0];
             string editedGFSPath = args[1];
             string outGFSPath = args[2];
-            string exclusions = "";
-
-            if (args.Length == 4)
-                exclusions = args[3];
 
             ModelPack ogGFS = Resource.Load<ModelPack>(ogGFSPath);
             ModelPack editedGFS = Resource.Load<ModelPack>(editedGFSPath);
@@ -38,7 +36,21 @@ namespace GFDFldModelUpdater
                 if (ogNode == null)
                 {
                     // If the node doesn't exist in the original GFS, add it
+                    // (but first set the mesh field14 to 0 if it is 69)
+                    List<NodeAttachment> newMeshNodeAttachments = new();
+                    foreach (var attachment in node.Attachments.Where(x => x.Type == NodeAttachmentType.Mesh))
+                    {
+                        var nodeMesh = (NodeMeshAttachment)attachment;
+                        if (nodeMesh.Mesh.Field14 == 69)
+                            nodeMesh.Mesh.Field14 = 0;
+                        newMeshNodeAttachments.Add(nodeMesh);
+                    }
+                    var newAttachments = node.Attachments.Where(x => x.Type != NodeAttachmentType.Mesh).ToList();
+                    foreach (var meshattach in newMeshNodeAttachments)
+                        newAttachments.Add(meshattach);
+                    node.Attachments = newAttachments;
                     outGFS.Model.RootNode.AddChildNode(node);
+
                     Console.WriteLine($"Added Node \"{node.Name}\" to GFS", ConsoleColor.Green);
                 }
                 else
@@ -73,6 +85,7 @@ namespace GFDFldModelUpdater
                     // Add new mesh attachments if marked as "69" in the edited GFS
                     foreach (var attachment in editedMeshes.Where(x => x.Mesh.Field14 == 69))
                     {
+                        attachment.Mesh.Field14 = 0;
                         newMeshAttachments.Add(attachment);
                         Console.WriteLine($"Added Mesh Attachment with Material \"{attachment.Mesh.MaterialName}\" to Node \"{node.Name}\"", ConsoleColor.Green);
                     }
