@@ -1,5 +1,7 @@
 ﻿using GFDLibrary;
+using GFDLibrary.Models;
 using GFDLibrary.Textures;
+using GFDStudio.FormatModules;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -13,7 +15,6 @@ namespace GifToMatAnim
         static void Main(string[] args)
         {
             string inputGif = args[0];
-            string outputDDS = "./output.dds";
 
             using (Image gif = Image.FromFile(inputGif))
             {
@@ -63,9 +64,28 @@ namespace GifToMatAnim
                 }
 
                 // Convert to DDS
-                var texture = TextureEncoder.Encode("temp.dds", TextureFormat.DDS, composite);
-                File.WriteAllBytes(outputDDS, texture.Data);
-                Console.WriteLine($"Saved {frameIndices.Length} frames into DDS file: {outputDDS}");
+                var texture = TextureEncoder.Encode(Path.GetFileNameWithoutExtension(args[0]) + ".dds", TextureFormat.DDS, composite);
+
+                // Inject into GMD
+                var gmd = ModuleImportUtilities.ImportFile<ModelPack>("./GMD/IT0420_072.GMD");
+                gmd.Textures.Textures.First().Data = texture.Data;
+                gmd.Textures.Textures.First().Name = texture.Name;
+                gmd.Materials.Materials[0].DiffuseMap.Name = texture.Name;
+                gmd.Materials.Materials[0].DiffuseMap.Flags = 1; // Field44, makes texture animate
+                gmd.Materials.Materials[0].Name = Path.GetFileNameWithoutExtension(texture.Name);
+                foreach (var node in gmd.Model.Nodes.Where(x => x.HasAttachments 
+                && x.Attachments.Any(y => y.Type == GFDLibrary.Models.NodeAttachmentType.Mesh)))
+                {
+                    foreach(NodeMeshAttachment mesh in node.Attachments.Where(y => y.Type == GFDLibrary.Models.NodeAttachmentType.Mesh))
+                    {
+                        mesh.Mesh.MaterialName = gmd.Materials.Materials[0].Name;
+                    }
+                }
+                gmd.AnimationPack.Animations[0].Controllers[0].TargetName = gmd.Materials.Materials[0].Name;
+                Directory.CreateDirectory("./Output/");
+                gmd.Save("./Output/IT0420_072.GMD");
+                Console.WriteLine($"Saved GMD file: ./Output/IT0420_072.GMD");
+                Console.ReadKey();
             }
         }
 

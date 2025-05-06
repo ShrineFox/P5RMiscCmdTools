@@ -16,4 +16,10 @@
     <ProjectReference Include="..\..\GFD-Studio\GFDStudio\GFDStudio.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="GMD\IT0420_072.GMD">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
