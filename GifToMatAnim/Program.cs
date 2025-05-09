@@ -2,11 +2,8 @@
 using GFDLibrary.Models;
 using GFDLibrary.Textures;
 using GFDStudio.FormatModules;
-using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
 
 namespace GifToMatAnim
 {
@@ -15,13 +12,16 @@ namespace GifToMatAnim
         static void Main(string[] args)
         {
             string inputGif = args[0];
+            string outPath = @"C:\Reloaded\Mods\p5rpc.vinesauce\Mod Files\Main\_Models\FIELD.CPK\MODEL\ITEM\IT0420_073.GMD";
 
             using (Image gif = Image.FromFile(inputGif))
             {
                 FrameDimension dimension = new FrameDimension(gif.FrameDimensionsList[0]);
                 int totalFrames = gif.GetFrameCount(dimension);
 
-                int targetFrameCount = 21;
+                int targetFrameCount = 70;
+                float duration = 0.999999f;
+
                 int[] frameIndices = Enumerable.Range(0, targetFrameCount)
                                                .Select(i => (int)Math.Round(i * (totalFrames - 1) / (double)(targetFrameCount - 1)))
                                                .Distinct()
@@ -29,7 +29,7 @@ namespace GifToMatAnim
 
                 // Step 1: Determine ideal 16:9 resolution closest to original
                 gif.SelectActiveFrame(dimension, 0);
-                Size targetSize = GetNearest16by9Resolution(gif.Width, gif.Height);
+                Size targetSize = GetNearest16by9Resolution(gif.Width / 2, gif.Height / 2);
 
                 // Step 2: Resize and collect frames
                 Bitmap[] frames = new Bitmap[frameIndices.Length];
@@ -79,12 +79,80 @@ namespace GifToMatAnim
                     foreach(NodeMeshAttachment mesh in node.Attachments.Where(y => y.Type == GFDLibrary.Models.NodeAttachmentType.Mesh))
                     {
                         mesh.Mesh.MaterialName = gmd.Materials.Materials[0].Name;
+                        for (int v = 0; v < mesh.Mesh.TexCoordsChannel0.Length; v++)
+                        {
+                            switch(v)
+                            {
+                                case 0:
+                                    mesh.Mesh.TexCoordsChannel0[v].X = 0.00001f;
+                                    mesh.Mesh.TexCoordsChannel0[v].Y = 0.999999f;
+                                    break;
+                                case 1:
+                                    mesh.Mesh.TexCoordsChannel0[v].X = 0.999999f / targetFrameCount;
+                                    mesh.Mesh.TexCoordsChannel0[v].Y = 0.999999f;
+                                    break;
+                                case 2:
+                                    mesh.Mesh.TexCoordsChannel0[v].X = 0.00001f;
+                                    mesh.Mesh.TexCoordsChannel0[v].Y = 0.00001f;
+                                    break;
+                                case 3:
+                                    mesh.Mesh.TexCoordsChannel0[v].X = 0.999999f / targetFrameCount;
+                                    mesh.Mesh.TexCoordsChannel0[v].Y = 0.00001f;
+                                    break;
+                                case 4:
+                                    mesh.Mesh.TexCoordsChannel0[v].X = 0.00001f;
+                                    mesh.Mesh.TexCoordsChannel0[v].Y = 0.999999f;
+                                    break;
+                                case 5:
+                                    mesh.Mesh.TexCoordsChannel0[v].X = 0.999999f / targetFrameCount;
+                                    mesh.Mesh.TexCoordsChannel0[v].Y = 0.999999f;
+                                    break;
+                                case 6:
+                                    mesh.Mesh.TexCoordsChannel0[v].X = 0.00001f;
+                                    mesh.Mesh.TexCoordsChannel0[v].Y = 0.00001f;
+                                    break;
+                                case 7:
+                                    mesh.Mesh.TexCoordsChannel0[v].X = 0.999999f / targetFrameCount;
+                                    mesh.Mesh.TexCoordsChannel0[v].Y = 0.00001f;
+                                    break;
+                                case 8:
+                                    mesh.Mesh.TexCoordsChannel0[v].X = 0.00001f;
+                                    mesh.Mesh.TexCoordsChannel0[v].Y = 0.999999f;
+                                    break;
+                                case 9:
+                                    mesh.Mesh.TexCoordsChannel0[v].X = 0.999999f / targetFrameCount;
+                                    mesh.Mesh.TexCoordsChannel0[v].Y = 0.999999f;
+                                    break;
+                                case 10:
+                                    mesh.Mesh.TexCoordsChannel0[v].X = 0.00001f;
+                                    mesh.Mesh.TexCoordsChannel0[v].Y = 0.00001f;
+                                    break;
+                                case 11:
+                                    mesh.Mesh.TexCoordsChannel0[v].X = 0.999999f / targetFrameCount;
+                                    mesh.Mesh.TexCoordsChannel0[v].Y = 0.00001f;
+                                    break;
+                            }
+                        }
                     }
                 }
                 gmd.AnimationPack.Animations[0].Controllers[0].TargetName = gmd.Materials.Materials[0].Name;
-                Directory.CreateDirectory("./Output/");
-                gmd.Save("./Output/IT0420_072.GMD");
-                Console.WriteLine($"Saved GMD file: ./Output/IT0420_072.GMD");
+                gmd.AnimationPack.Animations[0].Controllers[0].Layers[0].Keys.Clear();
+                gmd.AnimationPack.Animations[0].Duration = duration;
+                for (int i = 0; i < targetFrameCount; i++)
+                {
+                    gmd.AnimationPack.Animations[0].Controllers[0].Layers[0].Keys.Add(new GFDLibrary.Animations.Single5Key()
+                    {
+                        Time = (duration / targetFrameCount) * (i + 1),
+                        Field00 = (duration / targetFrameCount) * i,
+                        Field04 = 0f,
+                        Field08 = 1f,
+                        Field0C = 1f,
+                        Field10 = 0f
+                    });
+                }
+                Directory.CreateDirectory(Path.GetDirectoryName(outPath));
+                gmd.Save(outPath);
+                Console.WriteLine($"Saved GMD file: {outPath}");
                 Console.ReadKey();
             }
         }
