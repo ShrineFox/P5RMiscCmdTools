@@ -19,7 +19,7 @@ namespace GifToMatAnim
                 FrameDimension dimension = new FrameDimension(gif.FrameDimensionsList[0]);
                 int totalFrames = gif.GetFrameCount(dimension);
 
-                int targetFrameCount = 70;
+                int targetFrameCount = 60;
                 float duration = 0.999999f;
 
                 int[] frameIndices = Enumerable.Range(0, targetFrameCount)
