@@ -3,9 +3,9 @@ using GFDLibrary.Models;
 
 namespace GFDFldModelUpdater
 {
-    internal class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             string ogGFSPath = args[0];
             string editedGFSPath = args[1];
@@ -165,7 +165,6 @@ namespace GFDFldModelUpdater
             // Save the updated GFS
             outGFS.Save(outGFSPath);
             Console.WriteLine($"\n\nSaved new GFS to: \"{outGFSPath}\"");
-            Console.ReadKey();
         }
     }
 }

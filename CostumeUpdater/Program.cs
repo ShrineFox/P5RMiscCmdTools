@@ -14,12 +14,12 @@ namespace CostumeUpdater
 
         static void Main(string[] args)
         {
-            /*
+            
             UpdateMatsAndTexFromSampleModel(
                 "D:\\Google Drive\\Modding\\Projects\\P5R Vinesauce Mod\\Models\\_PARTY\\" +
                 "1_Vinny_(Joker)\\7_156_Swimsuit_Visions Hoodie\\" +
                 "7_156_Swimsuit_Visions Hoodie.GMD");
-            */
+            
             CopyModelsToOutputFolders();
 
             Console.WriteLine("Done!");
