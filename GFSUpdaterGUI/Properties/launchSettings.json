@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "GFSUpdaterGUI": {
+      "commandName": "Project",
+      "commandLineArgs": "D:\\CPK\\BASE.CPK_unpacked\\MODEL\\FIELD_TEX m051_045"
+    }
+  }
+}

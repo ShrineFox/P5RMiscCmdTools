@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "P4GCameraPorter": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Users\\Ryan\\Downloads\\P4G\\field\\pack C:\\Users\\Ryan\\Downloads\\P4G\\f006_006.CMR C:\\Users\\Ryan\\Downloads\\P4G\\new3\\pak"
+    }
+  }
+}
