@@ -25,6 +25,8 @@ namespace RepackBINs
                 chk_ShrinkNewTex.Checked = true;
             if (config.ShrinkAllTextures)
                 chk_ShrinkAllTex.Checked = true;
+            if (config.UseRepackedInput)
+                chk_UseRepackedInput.Checked = true;
         }
 
         public void SaveJson(string jsonPath)
@@ -32,6 +34,7 @@ namespace RepackBINs
             // Update Checkbox States
             config.ShrinkNewTextures = chk_ShrinkNewTex.Checked;
             config.ShrinkAllTextures = chk_ShrinkAllTex.Checked;
+            config.UseRepackedInput = chk_UseRepackedInput.Checked;
 
             File.WriteAllText(jsonPath, JsonConvert.SerializeObject(config, Newtonsoft.Json.Formatting.Indented));
         }
@@ -80,6 +83,11 @@ namespace RepackBINs
                         PAKFileSystem pak = new PAKFileSystem();
 
                         string matchingOriginalBINFile = Path.Combine(config.OriginalBINDir, Path.GetFileName(looseBIN.Replace(".bin", "").Replace(".BIN", ""))) + ".BIN";
+                        string matchingRepackedBINFile = Path.Combine(config.RepackedBINDir, Path.GetFileName(looseBIN.Replace(".bin", "").Replace(".BIN", ""))) + ".BIN";
+                        // Use repacked BIN if setting is on and repacked BIN exists, saves time if dds is already shrinked
+                        if (config.UseRepackedInput && File.Exists(matchingRepackedBINFile))
+                            matchingOriginalBINFile = matchingRepackedBINFile;
+
                         if (PAKFileSystem.TryOpen(matchingOriginalBINFile, out pak))
                         {
                             foreach (var looseBinDds in Directory.GetFiles(looseBIN))
@@ -94,7 +102,7 @@ namespace RepackBINs
                                         
                                         string tempPath = Path.Combine("Temp", Path.GetFileName(looseBinDds));
                                         Console.WriteLine($"\tShrinking New Texture: {Path.GetFileName(looseBinDds)}");
-                                        var tex = TextureEncoder.Encode("temp.dds", TextureFormat.DDS, bmp);
+                                        var tex = TextureEncoder.Encode("temp.dds", TextureFormat.DDS, scaledBmp);
                                         MemoryStream ms = new MemoryStream(tex.Data);
                                             pak.AddFile(Path.GetFileName(looseBinDds), ms, false, ConflictPolicy.Replace);
                                         
@@ -127,7 +135,7 @@ namespace RepackBINs
                                         Bitmap scaledBmp = ScaleBitmapByHalf(bmp);
 
                                         Console.WriteLine($"\tShrinking Existing Texture: {Path.GetFileName(pakDds)}");
-                                        var tex = TextureEncoder.Encode("temp.dds", TextureFormat.DDS, bmp);
+                                        var tex = TextureEncoder.Encode("temp.dds", TextureFormat.DDS, scaledBmp);
                                         var ms2 = new MemoryStream(tex.Data);
                                         pak.AddFile(Path.GetFileName(pakDds), ms2, false, ConflictPolicy.Replace);
                                             
@@ -234,6 +242,7 @@ namespace RepackBINs
         };
         public bool ShrinkNewTextures { get; set; } = true;
         public bool ShrinkAllTextures { get; set; } = false;
+        public bool UseRepackedInput { get; set; } = true;
         public string OriginalBINDir { get; set; } = "";
         public string LooseBINDir { get; set; } = @"LooseBINs\MODEL\FIELD_TEX\TEXTURES";
         public string RepackedBINDir { get; set; } = @"RepackedBINs\TEX_WIP.CPK\MODEL\FIELD_TEX\TEXTURES";
