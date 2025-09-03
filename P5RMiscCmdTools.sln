@@ -5,8 +5,6 @@ VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateLooseBINs", "CreateLooseBINs\CreateLooseBINs.csproj", "{CA6E1E64-69F9-48FB-8F3E-D9622179A764}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtlusFileSystemLibrary", "..\AtlusFileSystemLibrary\Source\AtlusFileSystemLibrary\AtlusFileSystemLibrary.csproj", "{9960B785-6207-44E8-BA42-EC7F6F785344}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepackBINs", "RepackBINs\RepackBINs.csproj", "{886BBE9B-5384-425A-BE7F-ECBE8E51BA99}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClearReloadedIICache", "ClearReloadedIICache\ClearReloadedIICache.csproj", "{825231F0-D6DD-45C1-A791-E9C6861C1E86}"
@@ -19,15 +17,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RandomText", "RandomText\Ra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StringSearch", "StringSearch\StringSearch.csproj", "{5E0FD7F8-E44E-41F3-9DEB-910C267BAEEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtlusScriptCompiler", "..\Atlus-Script-Tools\Source\AtlusScriptCompiler\AtlusScriptCompiler.csproj", "{CE3C9A6D-2E90-41E8-8734-16BD95CA91D3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFDStudio", "..\GFD-Studio\GFDStudio\GFDStudio.csproj", "{2D056E77-C472-4A51-9CCE-25AEBF3E6EB2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RyoVolumeEdit", "RyoVolumeEdit\RyoVolumeEdit.csproj", "{E8020BD1-BEF6-4C16-8E3B-88C0F881D04F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFDMatDumper", "GFDMatDumper\GFDMatDumper.csproj", "{BCCEF77E-A668-6B31-51F2-8058DCA1F29B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFDLibrary", "..\GFD-Studio\GFDLibrary\GFDLibrary.csproj", "{021812FD-423B-A749-C5E9-847703F912D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFSExtractor", "GFSExtractor\GFSExtractor.csproj", "{DEA7A5FE-DC0F-492C-8686-B3CF966EF11D}"
 EndProject
@@ -43,10 +35,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceClipRenamer", "VoiceCl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GifToMatAnim", "GifToMatAnim\GifToMatAnim.csproj", "{7CB98D42-D531-4E07-AE6E-199BF825E7DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scarlet", "..\GFD-Studio\Dependencies\Scarlet\Scarlet\Scarlet.csproj", "{B1CC2B0E-4226-4AC5-9940-900A8847201A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scarlet.IO.ImageFormats", "..\GFD-Studio\Dependencies\Scarlet\Scarlet.IO.ImageFormats\Scarlet.IO.ImageFormats.csproj", "{4E7B19C8-1983-41FE-98E4-0532137638FC}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CueSheetGenerator", "CueSheetGenerator\CueSheetGenerator.csproj", "{EEDD6E39-5E64-406F-8658-F718B40E7AF6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CostumeUpdater", "CostumeUpdater\CostumeUpdater.csproj", "{BEF09AFB-92F3-469F-83FE-D2BECC4BBE15}"
@@ -59,6 +47,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P4GCameraPorter", "P4GCamer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GifToDDSStrip", "GifToDDSStrip\GifToDDSStrip.csproj", "{740543B4-283E-479F-963E-2C8CA2475853}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtlusScriptCompiler", "..\..\tge-was-taken\Atlus-Script-Tools\Source\AtlusScriptCompiler\AtlusScriptCompiler.csproj", "{ED39AC07-03DD-DAD8-2B15-D849D5FB9E40}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtlusFileSystemLibrary", "..\..\tge-was-taken\AtlusFileSystemLibrary\Source\AtlusFileSystemLibrary\AtlusFileSystemLibrary.csproj", "{9960B785-6207-44E8-BA42-EC7F6F785344}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFDStudio", "..\..\tge-was-taken\GFD-Studio\GFDStudio\GFDStudio.csproj", "{D9383DEA-DF5F-5327-30DB-27565016007E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFDLibrary", "..\..\tge-was-taken\GFD-Studio\GFDLibrary\GFDLibrary.csproj", "{17546283-37C7-266C-9AFB-2AC9798F744F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scarlet.IO.ImageFormats", "..\..\tge-was-taken\GFD-Studio\Dependencies\Scarlet\Scarlet.IO.ImageFormats\Scarlet.IO.ImageFormats.csproj", "{4E7B19C8-1983-41FE-98E4-0532137638FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scarlet", "..\..\tge-was-taken\GFD-Studio\Dependencies\Scarlet\Scarlet\Scarlet.csproj", "{B1CC2B0E-4226-4AC5-9940-900A8847201A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtlusScriptLibrary", "..\..\tge-was-taken\Atlus-Script-Tools\Source\AtlusScriptLibrary\AtlusScriptLibrary.csproj", "{7EC28679-8821-D1CB-89D7-17EB6E85CC27}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,10 +71,6 @@ Global
 		{CA6E1E64-69F9-48FB-8F3E-D9622179A764}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA6E1E64-69F9-48FB-8F3E-D9622179A764}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA6E1E64-69F9-48FB-8F3E-D9622179A764}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9960B785-6207-44E8-BA42-EC7F6F785344}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9960B785-6207-44E8-BA42-EC7F6F785344}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9960B785-6207-44E8-BA42-EC7F6F785344}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9960B785-6207-44E8-BA42-EC7F6F785344}.Release|Any CPU.Build.0 = Release|Any CPU
 		{886BBE9B-5384-425A-BE7F-ECBE8E51BA99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{886BBE9B-5384-425A-BE7F-ECBE8E51BA99}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{886BBE9B-5384-425A-BE7F-ECBE8E51BA99}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -97,14 +95,6 @@ Global
 		{5E0FD7F8-E44E-41F3-9DEB-910C267BAEEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E0FD7F8-E44E-41F3-9DEB-910C267BAEEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E0FD7F8-E44E-41F3-9DEB-910C267BAEEC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CE3C9A6D-2E90-41E8-8734-16BD95CA91D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CE3C9A6D-2E90-41E8-8734-16BD95CA91D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CE3C9A6D-2E90-41E8-8734-16BD95CA91D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CE3C9A6D-2E90-41E8-8734-16BD95CA91D3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2D056E77-C472-4A51-9CCE-25AEBF3E6EB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2D056E77-C472-4A51-9CCE-25AEBF3E6EB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2D056E77-C472-4A51-9CCE-25AEBF3E6EB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2D056E77-C472-4A51-9CCE-25AEBF3E6EB2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E8020BD1-BEF6-4C16-8E3B-88C0F881D04F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E8020BD1-BEF6-4C16-8E3B-88C0F881D04F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8020BD1-BEF6-4C16-8E3B-88C0F881D04F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -113,10 +103,6 @@ Global
 		{BCCEF77E-A668-6B31-51F2-8058DCA1F29B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCCEF77E-A668-6B31-51F2-8058DCA1F29B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCCEF77E-A668-6B31-51F2-8058DCA1F29B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{021812FD-423B-A749-C5E9-847703F912D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{021812FD-423B-A749-C5E9-847703F912D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{021812FD-423B-A749-C5E9-847703F912D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{021812FD-423B-A749-C5E9-847703F912D6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DEA7A5FE-DC0F-492C-8686-B3CF966EF11D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DEA7A5FE-DC0F-492C-8686-B3CF966EF11D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEA7A5FE-DC0F-492C-8686-B3CF966EF11D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -145,14 +131,6 @@ Global
 		{7CB98D42-D531-4E07-AE6E-199BF825E7DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CB98D42-D531-4E07-AE6E-199BF825E7DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7CB98D42-D531-4E07-AE6E-199BF825E7DD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B1CC2B0E-4226-4AC5-9940-900A8847201A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B1CC2B0E-4226-4AC5-9940-900A8847201A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B1CC2B0E-4226-4AC5-9940-900A8847201A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B1CC2B0E-4226-4AC5-9940-900A8847201A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4E7B19C8-1983-41FE-98E4-0532137638FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4E7B19C8-1983-41FE-98E4-0532137638FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4E7B19C8-1983-41FE-98E4-0532137638FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4E7B19C8-1983-41FE-98E4-0532137638FC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EEDD6E39-5E64-406F-8658-F718B40E7AF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EEDD6E39-5E64-406F-8658-F718B40E7AF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEDD6E39-5E64-406F-8658-F718B40E7AF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -177,6 +155,34 @@ Global
 		{740543B4-283E-479F-963E-2C8CA2475853}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{740543B4-283E-479F-963E-2C8CA2475853}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{740543B4-283E-479F-963E-2C8CA2475853}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED39AC07-03DD-DAD8-2B15-D849D5FB9E40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED39AC07-03DD-DAD8-2B15-D849D5FB9E40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED39AC07-03DD-DAD8-2B15-D849D5FB9E40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED39AC07-03DD-DAD8-2B15-D849D5FB9E40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9960B785-6207-44E8-BA42-EC7F6F785344}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9960B785-6207-44E8-BA42-EC7F6F785344}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9960B785-6207-44E8-BA42-EC7F6F785344}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9960B785-6207-44E8-BA42-EC7F6F785344}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9383DEA-DF5F-5327-30DB-27565016007E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9383DEA-DF5F-5327-30DB-27565016007E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9383DEA-DF5F-5327-30DB-27565016007E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9383DEA-DF5F-5327-30DB-27565016007E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17546283-37C7-266C-9AFB-2AC9798F744F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17546283-37C7-266C-9AFB-2AC9798F744F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17546283-37C7-266C-9AFB-2AC9798F744F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17546283-37C7-266C-9AFB-2AC9798F744F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E7B19C8-1983-41FE-98E4-0532137638FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E7B19C8-1983-41FE-98E4-0532137638FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E7B19C8-1983-41FE-98E4-0532137638FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E7B19C8-1983-41FE-98E4-0532137638FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1CC2B0E-4226-4AC5-9940-900A8847201A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1CC2B0E-4226-4AC5-9940-900A8847201A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1CC2B0E-4226-4AC5-9940-900A8847201A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1CC2B0E-4226-4AC5-9940-900A8847201A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EC28679-8821-D1CB-89D7-17EB6E85CC27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EC28679-8821-D1CB-89D7-17EB6E85CC27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EC28679-8821-D1CB-89D7-17EB6E85CC27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EC28679-8821-D1CB-89D7-17EB6E85CC27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

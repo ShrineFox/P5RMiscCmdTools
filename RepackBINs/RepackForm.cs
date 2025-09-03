@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using AtlusFileSystemLibrary;
+using AtlusFileSystemLibrary.Common.IO;
 using AtlusFileSystemLibrary.FileSystems.PAK;
-using AtlusFileSystemLibrary;
-using System.Security.Cryptography;
+using GFDLibrary.Textures;
 using Newtonsoft.Json;
+using System.Data;
 
 namespace RepackBINs
 {
@@ -23,13 +15,24 @@ namespace RepackBINs
         public RepackForm()
         {
             InitializeComponent();
+            // Load configuration settings from json near exe
             LoadJson(configPath);
+            // Add a checkbox for each area listed in the config
             foreach (var area in config.Fields)
                 checkedListBox_Areas.Items.Add(area.Name);
+            // Update Checkbox States
+            if (config.ShrinkNewTextures)
+                chk_ShrinkNewTex.Checked = true;
+            if (config.ShrinkAllTextures)
+                chk_ShrinkAllTex.Checked = true;
         }
 
         public void SaveJson(string jsonPath)
         {
+            // Update Checkbox States
+            config.ShrinkNewTextures = chk_ShrinkNewTex.Checked;
+            config.ShrinkAllTextures = chk_ShrinkAllTex.Checked;
+
             File.WriteAllText(jsonPath, JsonConvert.SerializeObject(config, Newtonsoft.Json.Formatting.Indented));
         }
 
@@ -81,12 +84,62 @@ namespace RepackBINs
                         {
                             foreach (var looseBinDds in Directory.GetFiles(looseBIN))
                             {
-                                pak.AddFile(Path.GetFileName(looseBinDds), looseBinDds, ConflictPolicy.Replace);
+                                if (chk_ShrinkNewTex.Checked)
+                                {
+                                    Bitmap bmp = ConvertDDSToBitmap(File.ReadAllBytes(looseBinDds));
+                                    
+                                    if (bmp.Width > 512 && bmp.Height > 512)
+                                    {
+                                        Bitmap scaledBmp = ScaleBitmapByHalf(bmp);
+                                        
+                                        string tempPath = Path.Combine("Temp", Path.GetFileName(looseBinDds));
+                                        Console.WriteLine($"\tShrinking New Texture: {Path.GetFileName(looseBinDds)}");
+                                        var tex = TextureEncoder.Encode("temp.dds", TextureFormat.DDS, bmp);
+                                        MemoryStream ms = new MemoryStream(tex.Data);
+                                            pak.AddFile(Path.GetFileName(looseBinDds), ms, false, ConflictPolicy.Replace);
+                                        
+                                    }
+                                }
+                                else
+                                {
+                                    pak.AddFile(Path.GetFileName(looseBinDds), looseBinDds, ConflictPolicy.Replace);
+                                    Console.WriteLine($"\tReplacing Texture: {Path.GetFileName(looseBinDds)}");
+                                }
                             }
+
+                            if (chk_ShrinkAllTex.Checked)
+                            {
+                                foreach (var pakDds in pak.EnumerateFiles().Where(x => x.ToLower().EndsWith(".dds")))
+                                {
+                                    string tempPath = Path.Combine("Temp", Path.GetFileName(pakDds));
+
+                                    Directory.CreateDirectory("Temp");
+                                    var ms = new MemoryStream();
+                                    using (var inputStream = pak.OpenFile(pakDds))
+                                    {
+                                        inputStream.CopyTo(ms);
+                                    }
+
+                                    Bitmap bmp = ConvertDDSToBitmap(ms.ToArray());
+                                        
+                                    if (bmp.Width > 512 && bmp.Height > 512)
+                                    {
+                                        Bitmap scaledBmp = ScaleBitmapByHalf(bmp);
+
+                                        Console.WriteLine($"\tShrinking Existing Texture: {Path.GetFileName(pakDds)}");
+                                        var tex = TextureEncoder.Encode("temp.dds", TextureFormat.DDS, bmp);
+                                        var ms2 = new MemoryStream(tex.Data);
+                                        pak.AddFile(Path.GetFileName(pakDds), ms2, false, ConflictPolicy.Replace);
+                                            
+                                    }
+                                    
+                                }
+                            }
+
                             string outputPath = Path.Combine(config.RepackedBINDir, Path.GetFileName(matchingOriginalBINFile));
-                            Console.WriteLine($"Repacking {outputPath}");
                             Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
                             pak.Save(outputPath);
+                            Console.WriteLine($"Repacked {outputPath}");
                         }
                         else
                             Console.WriteLine($"Failed to open original BIN: {matchingOriginalBINFile}");
@@ -96,6 +149,50 @@ namespace RepackBINs
             }
 
             Console.WriteLine($"\nDone repacking BINs!");
+
+            if (Directory.Exists("Temp"))
+                Directory.Delete("Temp", true);
+        }
+
+        private Bitmap ScaleBitmapByHalf(Bitmap bmp)
+        {
+            return new Bitmap(bmp, new Size((int)Math.Ceiling((double)bmp.Width / 2), (int)Math.Ceiling(((double)bmp.Height / 2))));
+        }
+
+        private Bitmap ConvertDDSToBitmap(byte[] ddsBytes)
+        {
+            var texture = new Texture() { Data = ddsBytes, Format = TextureFormat.DDS };
+            return TextureDecoder.Decode(texture);
+        }
+
+        /// <summary>
+        /// Waits up to 20 seconds for a file to exist and become available to open.
+        /// </summary>
+        /// <param name="fullPath">The path to the file to wait for.</param>
+        /// <returns></returns>
+        public static FileStream WaitForFile(string fullPath,
+            FileMode mode = FileMode.Open,
+            FileAccess access = FileAccess.ReadWrite,
+            FileShare share = FileShare.None)
+        {
+            for (int numTries = 0; numTries < 10; numTries++)
+            {
+                FileStream fs = null;
+                try
+                {
+                    fs = new FileStream(fullPath, mode, access, share);
+                    return fs;
+                }
+                catch (IOException)
+                {
+                    if (fs != null)
+                    {
+                        fs.Dispose();
+                    }
+                    Thread.Sleep(2000);
+                }
+            }
+            return null;
         }
 
         private void SelectAll_Click(object sender, EventArgs e)
@@ -135,6 +232,8 @@ namespace RepackBINs
             new Field() { Name = "Mementos Depths", Ids = { 61, 161, 261 } },
             new Field() { Name = "Laboratory", Ids = { 62, 162, 262 } }
         };
+        public bool ShrinkNewTextures { get; set; } = true;
+        public bool ShrinkAllTextures { get; set; } = false;
         public string OriginalBINDir { get; set; } = "";
         public string LooseBINDir { get; set; } = @"LooseBINs\MODEL\FIELD_TEX\TEXTURES";
         public string RepackedBINDir { get; set; } = @"RepackedBINs\TEX_WIP.CPK\MODEL\FIELD_TEX\TEXTURES";

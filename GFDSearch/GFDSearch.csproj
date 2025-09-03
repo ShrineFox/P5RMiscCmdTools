@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\GFD-Studio\GFDLibrary\GFDLibrary.csproj" />
+    <ProjectReference Include="..\..\..\tge-was-taken\GFD-Studio\GFDLibrary\\GFDLibrary.csproj" />
   </ItemGroup>
 
 </Project>

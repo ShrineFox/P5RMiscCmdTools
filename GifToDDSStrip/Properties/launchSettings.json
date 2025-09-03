@@ -2,7 +2,7 @@
   "profiles": {
     "GifToDDSStrip": {
       "commandName": "Project",
-      "commandLineArgs": "\"C:\\Users\\ShrineFox\\Downloads\\New folder\" \"C:\\Users\\ShrineFox\\Downloads\\New folder\\out\""
+      "commandLineArgs": "\"C:\\Users\\ShrineFox\\Downloads\\New folder\\redo\" \"C:\\Users\\ShrineFox\\Downloads\\New folder\\out\""
     }
   }
 }
