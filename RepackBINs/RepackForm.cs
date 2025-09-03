@@ -2,8 +2,11 @@
 using AtlusFileSystemLibrary.Common.IO;
 using AtlusFileSystemLibrary.FileSystems.PAK;
 using GFDLibrary.Textures;
+using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using System.Data;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace RepackBINs
 {
@@ -50,22 +53,23 @@ namespace RepackBINs
 
         private void Repack_Click(object sender, EventArgs e)
         {
-            if (!Directory.Exists(config.OriginalBINDir))
+            try
             {
-                FolderBrowserDialog folderDialog = new FolderBrowserDialog() { UseDescriptionForTitle = true, Description = "Choose Unedited, Original .BINs Folder" };
-                if (folderDialog.ShowDialog() == DialogResult.OK)
+                if (!Directory.Exists(config.OriginalBINDir))
                 {
-                    config.OriginalBINDir = folderDialog.SelectedPath;
-                    SaveJson(configPath);
+                    FolderBrowserDialog folderDialog = new FolderBrowserDialog() { UseDescriptionForTitle = true, Description = "Choose Unedited, Original .BINs Folder" };
+                    if (folderDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        config.OriginalBINDir = folderDialog.SelectedPath;
+                        SaveJson(configPath);
+                    }
+                    else
+                        return;
                 }
-                else
-                    return;
-            }
 
-            foreach (object itemChecked in checkedListBox_Areas.CheckedItems)
-            {
-                try
+                foreach (object itemChecked in checkedListBox_Areas.CheckedItems)
                 {
+                
                     Field selectedField = config.Fields.First(x => x.Name == itemChecked.ToString());
 
                     string[] dirsToProcess;
@@ -80,33 +84,36 @@ namespace RepackBINs
 
                     foreach (var looseBIN in dirsToProcess)
                     {
-                        PAKFileSystem pak = new PAKFileSystem();
-
                         string matchingOriginalBINFile = Path.Combine(config.OriginalBINDir, Path.GetFileName(looseBIN.Replace(".bin", "").Replace(".BIN", ""))) + ".BIN";
                         string matchingRepackedBINFile = Path.Combine(config.RepackedBINDir, Path.GetFileName(looseBIN.Replace(".bin", "").Replace(".BIN", ""))) + ".BIN";
-                        // Use repacked BIN if setting is on and repacked BIN exists, saves time if dds is already shrinked
                         if (config.UseRepackedInput && File.Exists(matchingRepackedBINFile))
-                            matchingOriginalBINFile = matchingRepackedBINFile;
-
-                        if (PAKFileSystem.TryOpen(matchingOriginalBINFile, out pak))
                         {
+                            matchingOriginalBINFile = matchingRepackedBINFile;
+                        }
+
+                        PAKFileSystem pak = new PAKFileSystem();
+                        {
+                            if (!PAKFileSystem.TryOpen(matchingOriginalBINFile, out pak))
+                            {
+                                Console.WriteLine($"Failed to open original BIN: {matchingOriginalBINFile}");
+                                continue;
+                            }
+
                             foreach (var looseBinDds in Directory.GetFiles(looseBIN))
                             {
                                 if (chk_ShrinkNewTex.Checked)
                                 {
                                     Bitmap bmp = ConvertDDSToBitmap(File.ReadAllBytes(looseBinDds));
-                                    
-                                    if (bmp.Width > 512 && bmp.Height > 512)
+                                    while (bmp.Width > 512 || bmp.Height > 512)
                                     {
-                                        Bitmap scaledBmp = ScaleBitmapByHalf(bmp);
-                                        
-                                        string tempPath = Path.Combine("Temp", Path.GetFileName(looseBinDds));
-                                        Console.WriteLine($"\tShrinking New Texture: {Path.GetFileName(looseBinDds)}");
-                                        var tex = TextureEncoder.Encode("temp.dds", TextureFormat.DDS, scaledBmp);
-                                        MemoryStream ms = new MemoryStream(tex.Data);
-                                            pak.AddFile(Path.GetFileName(looseBinDds), ms, false, ConflictPolicy.Replace);
-                                        
+                                        bmp = ScaleBitmapByHalf(bmp);
                                     }
+
+                                    Console.WriteLine($"\tShrinking New Texture: {Path.GetFileName(looseBinDds)}");
+                                    var tex = TextureEncoder.Encode("temp.dds", TextureFormat.DDS, bmp);
+                                    MemoryStream ms = new MemoryStream(tex.Data);
+                                    pak.AddFile(Path.GetFileName(looseBinDds), ms, true, ConflictPolicy.Replace);
+                                    
                                 }
                                 else
                                 {
@@ -119,47 +126,41 @@ namespace RepackBINs
                             {
                                 foreach (var pakDds in pak.EnumerateFiles().Where(x => x.ToLower().EndsWith(".dds")))
                                 {
-                                    string tempPath = Path.Combine("Temp", Path.GetFileName(pakDds));
-
-                                    Directory.CreateDirectory("Temp");
-                                    var ms = new MemoryStream();
-                                    using (var inputStream = pak.OpenFile(pakDds))
+                                    MemoryStream ms = new MemoryStream();
                                     {
-                                        inputStream.CopyTo(ms);
-                                    }
-
-                                    Bitmap bmp = ConvertDDSToBitmap(ms.ToArray());
-                                        
-                                    if (bmp.Width > 512 && bmp.Height > 512)
-                                    {
-                                        Bitmap scaledBmp = ScaleBitmapByHalf(bmp);
-
+                                        using (var inputStream = pak.OpenFile(pakDds))
+                                        {
+                                            inputStream.CopyTo(ms);
+                                        }
+                                        Bitmap bmp = ConvertDDSToBitmap(ms.ToArray());
+                                        while (bmp.Width > 512 || bmp.Height > 512)
+                                        {
+                                            bmp = ScaleBitmapByHalf(bmp);
+                                        }
                                         Console.WriteLine($"\tShrinking Existing Texture: {Path.GetFileName(pakDds)}");
-                                        var tex = TextureEncoder.Encode("temp.dds", TextureFormat.DDS, scaledBmp);
+                                        var tex = TextureEncoder.Encode("temp.dds", TextureFormat.DDS, bmp);
                                         var ms2 = new MemoryStream(tex.Data);
-                                        pak.AddFile(Path.GetFileName(pakDds), ms2, false, ConflictPolicy.Replace);
-                                            
+                                        pak.AddFile(Path.GetFileName(pakDds), ms2, true, ConflictPolicy.Replace);
+                                        
                                     }
-                                    
+                                    //ms.Dispose();
                                 }
                             }
 
                             string outputPath = Path.Combine(config.RepackedBINDir, Path.GetFileName(matchingOriginalBINFile));
                             Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
-                            pak.Save(outputPath);
+                            pak.Save(outputPath + "_");
                             Console.WriteLine($"Repacked {outputPath}");
                         }
-                        else
-                            Console.WriteLine($"Failed to open original BIN: {matchingOriginalBINFile}");
                     }
                 }
-                catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+
+                Console.WriteLine($"\nDone repacking BINs!");
+
+                Process.Start("BinCleanup.exe");
+                Process.GetCurrentProcess().Kill();
             }
-
-            Console.WriteLine($"\nDone repacking BINs!");
-
-            if (Directory.Exists("Temp"))
-                Directory.Delete("Temp", true);
+            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
         }
 
         private Bitmap ScaleBitmapByHalf(Bitmap bmp)
@@ -248,4 +249,130 @@ namespace RepackBINs
         public string RepackedBINDir { get; set; } = @"RepackedBINs\TEX_WIP.CPK\MODEL\FIELD_TEX\TEXTURES";
     }
 
+    public static class ObjectExtensions
+    {
+        private static readonly MethodInfo CloneMethod = typeof(Object).GetMethod("MemberwiseClone", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        public static bool IsPrimitive(this Type type)
+        {
+            if (type == typeof(String)) return true;
+            return (type.IsValueType & type.IsPrimitive);
+        }
+
+        /// <summary>
+        /// Create a deep copy of an object.
+        /// </summary>
+        /// <param name="originalObject">The object to copy.</param>
+        /// <returns></returns>
+        public static Object Copy(this Object originalObject)
+        {
+            return InternalCopy(originalObject, new Dictionary<Object, Object>(new ReferenceEqualityComparer()));
+        }
+        private static Object InternalCopy(Object originalObject, IDictionary<Object, Object> visited)
+        {
+            if (originalObject == null) return null;
+            var typeToReflect = originalObject.GetType();
+            if (IsPrimitive(typeToReflect)) return originalObject;
+            if (visited.ContainsKey(originalObject)) return visited[originalObject];
+            if (typeof(Delegate).IsAssignableFrom(typeToReflect)) return null;
+            var cloneObject = CloneMethod.Invoke(originalObject, null);
+            if (typeToReflect.IsArray)
+            {
+                var arrayType = typeToReflect.GetElementType();
+                if (IsPrimitive(arrayType) == false)
+                {
+                    Array clonedArray = (Array)cloneObject;
+                    clonedArray.ForEach((array, indices) => array.SetValue(InternalCopy(clonedArray.GetValue(indices), visited), indices));
+                }
+
+            }
+            visited.Add(originalObject, cloneObject);
+            CopyFields(originalObject, visited, cloneObject, typeToReflect);
+            RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect);
+            return cloneObject;
+        }
+
+        private static void RecursiveCopyBaseTypePrivateFields(object originalObject, IDictionary<object, object> visited, object cloneObject, Type typeToReflect)
+        {
+            if (typeToReflect.BaseType != null)
+            {
+                RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect.BaseType);
+                CopyFields(originalObject, visited, cloneObject, typeToReflect.BaseType, BindingFlags.Instance | BindingFlags.NonPublic, info => info.IsPrivate);
+            }
+        }
+
+        private static void CopyFields(object originalObject, IDictionary<object, object> visited, object cloneObject, Type typeToReflect, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy, Func<FieldInfo, bool> filter = null)
+        {
+            foreach (FieldInfo fieldInfo in typeToReflect.GetFields(bindingFlags))
+            {
+                if (filter != null && filter(fieldInfo) == false) continue;
+                if (IsPrimitive(fieldInfo.FieldType)) continue;
+                var originalFieldValue = fieldInfo.GetValue(originalObject);
+                var clonedFieldValue = InternalCopy(originalFieldValue, visited);
+                fieldInfo.SetValue(cloneObject, clonedFieldValue);
+            }
+        }
+        public static T Copy<T>(this T original)
+        {
+            return (T)Copy((Object)original);
+        }
+    }
+
+    public class ReferenceEqualityComparer : EqualityComparer<Object>
+    {
+        public override bool Equals(object x, object y)
+        {
+            return ReferenceEquals(x, y);
+        }
+        public override int GetHashCode(object obj)
+        {
+            if (obj == null) return 0;
+            return obj.GetHashCode();
+        }
+    }
+
+    public static class ArrayExtensions
+    {
+        public static void ForEach(this Array array, Action<Array, int[]> action)
+        {
+            if (array.LongLength == 0) return;
+            ArrayTraverse walker = new ArrayTraverse(array);
+            do action(array, walker.Position);
+            while (walker.Step());
+        }
+    }
+
+    internal class ArrayTraverse
+    {
+        public int[] Position;
+        private int[] maxLengths;
+
+        public ArrayTraverse(Array array)
+        {
+            maxLengths = new int[array.Rank];
+            for (int i = 0; i < array.Rank; ++i)
+            {
+                maxLengths[i] = array.GetLength(i) - 1;
+            }
+            Position = new int[array.Rank];
+        }
+
+        public bool Step()
+        {
+            for (int i = 0; i < Position.Length; ++i)
+            {
+                if (Position[i] < maxLengths[i])
+                {
+                    Position[i]++;
+                    for (int j = 0; j < i; j++)
+                    {
+                        Position[j] = 0;
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 }
+

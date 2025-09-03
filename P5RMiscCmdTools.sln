@@ -61,6 +61,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scarlet", "..\..\tge-was-ta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtlusScriptLibrary", "..\..\tge-was-taken\Atlus-Script-Tools\Source\AtlusScriptLibrary\AtlusScriptLibrary.csproj", "{7EC28679-8821-D1CB-89D7-17EB6E85CC27}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinCleanup", "BinCleanup\BinCleanup.csproj", "{55238A25-037D-4488-A2AA-D83F63CE0A3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -183,6 +185,10 @@ Global
 		{7EC28679-8821-D1CB-89D7-17EB6E85CC27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EC28679-8821-D1CB-89D7-17EB6E85CC27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7EC28679-8821-D1CB-89D7-17EB6E85CC27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55238A25-037D-4488-A2AA-D83F63CE0A3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55238A25-037D-4488-A2AA-D83F63CE0A3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55238A25-037D-4488-A2AA-D83F63CE0A3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55238A25-037D-4488-A2AA-D83F63CE0A3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
