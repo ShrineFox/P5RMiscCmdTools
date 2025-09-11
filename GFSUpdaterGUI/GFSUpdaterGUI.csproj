@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GFDFldModelUpdater\GFDFldModelUpdater.csproj" />
+    <ProjectReference Include="..\GFDModelUpdater\GFDModelUpdater.csproj" />
   </ItemGroup>
 
 </Project>

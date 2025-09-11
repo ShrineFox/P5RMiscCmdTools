@@ -13,11 +13,13 @@ namespace GFSUpdaterGUI
 
         public static Settings config = new Settings();
 
+        [Serializable]
         public class Settings
         {
             public string OG_GFS { get; set; } = "";
             public string EditedGMD { get; set; } = "";
             public string OutputDir { get; set; } = "";
+            public bool GFSMode { get; set; } = false;
         }
 
         public void SaveJson(string jsonPath)
@@ -36,12 +38,25 @@ namespace GFSUpdaterGUI
 
         private void GenerateBtn_Click(object sender, EventArgs e)
         {
-            GFDFldModelUpdater.Program.Main(new string[]
+            if (gFSModeToolStripMenuItem.Checked)
             {
-                txt_OG_GFS.Text,
-                txt_EditedGMD.Text,
-                Path.Combine(txt_OutputDir.Text, Path.GetFileName(txt_OG_GFS.Text))
-            });
+                GFDFldModelUpdater.Program.Main(new string[]
+                {
+                    txt_OG_GFS.Text,
+                    txt_EditedGMD.Text,
+                    Path.Combine(txt_OutputDir.Text, Path.GetFileName(txt_OG_GFS.Text))
+                });
+            }
+            else
+            {
+                GFDModelUpdater.Program.Main(new string[]
+                {
+                    txt_OG_GFS.Text,
+                    txt_EditedGMD.Text,
+                    Path.Combine(txt_OutputDir.Text, Path.GetFileName(txt_EditedGMD.Text))
+                });
+            }
+
             MessageBox.Show("Done!");
         }
 

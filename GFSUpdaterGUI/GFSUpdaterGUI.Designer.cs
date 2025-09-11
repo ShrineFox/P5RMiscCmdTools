@@ -41,6 +41,8 @@
             fileToolStripMenuItem = new ToolStripMenuItem();
             saveToolStripMenuItem = new ToolStripMenuItem();
             loadToolStripMenuItem = new ToolStripMenuItem();
+            optionsToolStripMenuItem = new ToolStripMenuItem();
+            gFSModeToolStripMenuItem = new ToolStripMenuItem();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -171,7 +173,7 @@
             // menuStrip1
             // 
             menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, optionsToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(800, 28);
@@ -188,16 +190,32 @@
             // saveToolStripMenuItem
             // 
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(224, 26);
+            saveToolStripMenuItem.Size = new Size(125, 26);
             saveToolStripMenuItem.Text = "Save";
             saveToolStripMenuItem.Click += Save_Click;
             // 
             // loadToolStripMenuItem
             // 
             loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            loadToolStripMenuItem.Size = new Size(224, 26);
+            loadToolStripMenuItem.Size = new Size(125, 26);
             loadToolStripMenuItem.Text = "Load";
             loadToolStripMenuItem.Click += Load_Click;
+            // 
+            // optionsToolStripMenuItem
+            // 
+            optionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { gFSModeToolStripMenuItem });
+            optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            optionsToolStripMenuItem.Size = new Size(75, 24);
+            optionsToolStripMenuItem.Text = "Options";
+            // 
+            // gFSModeToolStripMenuItem
+            // 
+            gFSModeToolStripMenuItem.Checked = true;
+            gFSModeToolStripMenuItem.CheckOnClick = true;
+            gFSModeToolStripMenuItem.CheckState = CheckState.Checked;
+            gFSModeToolStripMenuItem.Name = "gFSModeToolStripMenuItem";
+            gFSModeToolStripMenuItem.Size = new Size(224, 26);
+            gFSModeToolStripMenuItem.Text = "GFS Mode";
             // 
             // GFSUpdaterGUI
             // 
@@ -235,5 +253,7 @@
         private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem saveToolStripMenuItem;
         private ToolStripMenuItem loadToolStripMenuItem;
+        private ToolStripMenuItem optionsToolStripMenuItem;
+        private ToolStripMenuItem gFSModeToolStripMenuItem;
     }
 }
