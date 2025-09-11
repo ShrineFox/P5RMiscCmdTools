@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "GFDModelUpdater": {
+      "commandName": "Project",
+      "commandLineArgs": "\"D:\\Projects\\P5R Vinesauce Mod\\Models\\_BOSSES\\1_Gordon Ramsay\\EM0201.GMD\" \"D:\\Projects\\P5R Vinesauce Mod\\Models\\_BOSSES\\1_Gordon Ramsay\\GordonBossForm.GMD\" \"D:\\Projects\\P5R Vinesauce Mod\\Models\\_BOSSES\\1_Gordon Ramsay\\GordonBossForm2.GMD\" "
+    }
+  }
+}
