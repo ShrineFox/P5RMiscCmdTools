@@ -65,6 +65,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinCleanup", "BinCleanup\Bi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFDModelUpdater", "GFDModelUpdater\GFDModelUpdater.csproj", "{DB5AECB3-299E-4863-B0C8-A3F9427771D1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShadowVoiceEffect", "ShadowVoiceEffect\ShadowVoiceEffect.csproj", "{D02E60C1-F836-44E7-BA62-641527276E2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFDTexDowngrader", "GFDTexDowngrader\GFDTexDowngrader.csproj", "{571D61E9-E292-45D1-BB4E-8D1E61BA3EAA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -195,6 +199,14 @@ Global
 		{DB5AECB3-299E-4863-B0C8-A3F9427771D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB5AECB3-299E-4863-B0C8-A3F9427771D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB5AECB3-299E-4863-B0C8-A3F9427771D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D02E60C1-F836-44E7-BA62-641527276E2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D02E60C1-F836-44E7-BA62-641527276E2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D02E60C1-F836-44E7-BA62-641527276E2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D02E60C1-F836-44E7-BA62-641527276E2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{571D61E9-E292-45D1-BB4E-8D1E61BA3EAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{571D61E9-E292-45D1-BB4E-8D1E61BA3EAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{571D61E9-E292-45D1-BB4E-8D1E61BA3EAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{571D61E9-E292-45D1-BB4E-8D1E61BA3EAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

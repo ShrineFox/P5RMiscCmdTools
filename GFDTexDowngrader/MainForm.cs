@@ -1,0 +1,219 @@
+﻿using AtlusFileSystemLibrary;
+using AtlusFileSystemLibrary.Common.IO;
+using AtlusFileSystemLibrary.FileSystems.PAK;
+using GFDLibrary.Textures;
+using System.Data;
+using System.Diagnostics;
+using System.Reflection;
+
+namespace GFDTexDowngrader
+{
+    public partial class MainForm : Form
+    {
+        public static string outDir = "./out/";
+        public MainForm()
+        {
+            InitializeComponent();
+        }
+
+        private void Repack_Click(object sender, EventArgs e)
+        {
+            string ps3Dir = txt_PathPS3.Text;
+            string p5rDir = txt_PathP5R.Text;
+
+            foreach (var file in Directory.GetFiles(ps3Dir, "*", SearchOption.AllDirectories).Where(x => 
+            x.EndsWith(".GFS") || x.EndsWith(".GMD")))
+            {
+                string dest = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), file.Replace(ps3Dir, ""));
+                Directory.CreateDirectory(Path.GetDirectoryName(dest));
+                if (!File.Exists(dest))
+                File.Copy(file, dest);
+            }
+            MessageBox.Show("Done!");
+        }
+
+        private Bitmap ScaleBitmapByHalf(Bitmap bmp)
+        {
+            return new Bitmap(bmp, new Size((int)Math.Ceiling((double)bmp.Width / 2), (int)Math.Ceiling(((double)bmp.Height / 2))));
+        }
+
+        private Bitmap ConvertDDSToBitmap(byte[] ddsBytes)
+        {
+            var texture = new Texture() { Data = ddsBytes, Format = TextureFormat.DDS };
+            return TextureDecoder.Decode(texture);
+        }
+
+        /// <summary>
+        /// Waits up to 20 seconds for a file to exist and become available to open.
+        /// </summary>
+        /// <param name="fullPath">The path to the file to wait for.</param>
+        /// <returns></returns>
+        public static FileStream WaitForFile(string fullPath,
+            FileMode mode = FileMode.Open,
+            FileAccess access = FileAccess.ReadWrite,
+            FileShare share = FileShare.None)
+        {
+            for (int numTries = 0; numTries < 10; numTries++)
+            {
+                FileStream fs = null;
+                try
+                {
+                    fs = new FileStream(fullPath, mode, access, share);
+                    return fs;
+                }
+                catch (IOException)
+                {
+                    if (fs != null)
+                    {
+                        fs.Dispose();
+                    }
+                    Thread.Sleep(2000);
+                }
+            }
+            return null;
+        }
+
+        private void PathP5R_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void PathPS3_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+
+    public class Field
+    {
+        public string Name { get; set; } = "";
+        public List<int> Ids { get; set; } = new List<int>();
+    }
+
+    public static class ObjectExtensions
+    {
+        private static readonly MethodInfo CloneMethod = typeof(Object).GetMethod("MemberwiseClone", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        public static bool IsPrimitive(this Type type)
+        {
+            if (type == typeof(String)) return true;
+            return (type.IsValueType & type.IsPrimitive);
+        }
+
+        /// <summary>
+        /// Create a deep copy of an object.
+        /// </summary>
+        /// <param name="originalObject">The object to copy.</param>
+        /// <returns></returns>
+        public static Object Copy(this Object originalObject)
+        {
+            return InternalCopy(originalObject, new Dictionary<Object, Object>(new ReferenceEqualityComparer()));
+        }
+        private static Object InternalCopy(Object originalObject, IDictionary<Object, Object> visited)
+        {
+            if (originalObject == null) return null;
+            var typeToReflect = originalObject.GetType();
+            if (IsPrimitive(typeToReflect)) return originalObject;
+            if (visited.ContainsKey(originalObject)) return visited[originalObject];
+            if (typeof(Delegate).IsAssignableFrom(typeToReflect)) return null;
+            var cloneObject = CloneMethod.Invoke(originalObject, null);
+            if (typeToReflect.IsArray)
+            {
+                var arrayType = typeToReflect.GetElementType();
+                if (IsPrimitive(arrayType) == false)
+                {
+                    Array clonedArray = (Array)cloneObject;
+                    clonedArray.ForEach((array, indices) => array.SetValue(InternalCopy(clonedArray.GetValue(indices), visited), indices));
+                }
+
+            }
+            visited.Add(originalObject, cloneObject);
+            CopyFields(originalObject, visited, cloneObject, typeToReflect);
+            RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect);
+            return cloneObject;
+        }
+
+        private static void RecursiveCopyBaseTypePrivateFields(object originalObject, IDictionary<object, object> visited, object cloneObject, Type typeToReflect)
+        {
+            if (typeToReflect.BaseType != null)
+            {
+                RecursiveCopyBaseTypePrivateFields(originalObject, visited, cloneObject, typeToReflect.BaseType);
+                CopyFields(originalObject, visited, cloneObject, typeToReflect.BaseType, BindingFlags.Instance | BindingFlags.NonPublic, info => info.IsPrivate);
+            }
+        }
+
+        private static void CopyFields(object originalObject, IDictionary<object, object> visited, object cloneObject, Type typeToReflect, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy, Func<FieldInfo, bool> filter = null)
+        {
+            foreach (FieldInfo fieldInfo in typeToReflect.GetFields(bindingFlags))
+            {
+                if (filter != null && filter(fieldInfo) == false) continue;
+                if (IsPrimitive(fieldInfo.FieldType)) continue;
+                var originalFieldValue = fieldInfo.GetValue(originalObject);
+                var clonedFieldValue = InternalCopy(originalFieldValue, visited);
+                fieldInfo.SetValue(cloneObject, clonedFieldValue);
+            }
+        }
+        public static T Copy<T>(this T original)
+        {
+            return (T)Copy((Object)original);
+        }
+    }
+
+    public class ReferenceEqualityComparer : EqualityComparer<Object>
+    {
+        public override bool Equals(object x, object y)
+        {
+            return ReferenceEquals(x, y);
+        }
+        public override int GetHashCode(object obj)
+        {
+            if (obj == null) return 0;
+            return obj.GetHashCode();
+        }
+    }
+
+    public static class ArrayExtensions
+    {
+        public static void ForEach(this Array array, Action<Array, int[]> action)
+        {
+            if (array.LongLength == 0) return;
+            ArrayTraverse walker = new ArrayTraverse(array);
+            do action(array, walker.Position);
+            while (walker.Step());
+        }
+    }
+
+    internal class ArrayTraverse
+    {
+        public int[] Position;
+        private int[] maxLengths;
+
+        public ArrayTraverse(Array array)
+        {
+            maxLengths = new int[array.Rank];
+            for (int i = 0; i < array.Rank; ++i)
+            {
+                maxLengths[i] = array.GetLength(i) - 1;
+            }
+            Position = new int[array.Rank];
+        }
+
+        public bool Step()
+        {
+            for (int i = 0; i < Position.Length; ++i)
+            {
+                if (Position[i] < maxLengths[i])
+                {
+                    Position[i]++;
+                    for (int j = 0; j < i; j++)
+                    {
+                        Position[j] = 0;
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+}
+

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ShadowVoiceEffect": {
+      "commandName": "Project",
+      "commandLineArgs": "\"D:\\Projects\\P5R Vinesauce Mod\\Sound\\Voice Clips\\_ENEMIES\\Gordon Ramsay\""
+    }
+  }
+}
