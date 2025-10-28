@@ -12,15 +12,17 @@ namespace GifToMatAnim
         static void Main(string[] args)
         {
             string inputGif = args[0];
-            string outPath = @"C:\Reloaded\Mods\p5rpc.vinesauce\Mod Files\Main\_Models\FIELD.CPK\MODEL\ITEM\IT0420_073.GMD";
+            string outPath = @"D:\Games\Reloaded\Mods\p5rpc.vinesauce\Mod Files\Toggleable\New Story\Effects\JUMPSCARES.CPK\FIELD\EFFECT\BANK\FB805\FNAF\FOXY_JUMP.GMD";
 
             using (Image gif = Image.FromFile(inputGif))
             {
                 FrameDimension dimension = new FrameDimension(gif.FrameDimensionsList[0]);
                 int totalFrames = gif.GetFrameCount(dimension);
 
-                int targetFrameCount = 60;
-                float duration = 0.999999f;
+                float minValue = 0.00001f;
+                float duration = 9.999999f;
+                int targetFrameCount = 120;
+
 
                 int[] frameIndices = Enumerable.Range(0, targetFrameCount)
                                                .Select(i => (int)Math.Round(i * (totalFrames - 1) / (double)(targetFrameCount - 1)))
@@ -29,7 +31,7 @@ namespace GifToMatAnim
 
                 // Step 1: Determine ideal 16:9 resolution closest to original
                 gif.SelectActiveFrame(dimension, 0);
-                Size targetSize = GetNearest16by9Resolution(gif.Width / 2, gif.Height / 2);
+                Size targetSize = GetNearest16by9Resolution(gif.Width / 4, gif.Height / 4);
 
                 // Step 2: Resize and collect frames
                 Bitmap[] frames = new Bitmap[frameIndices.Length];
@@ -67,7 +69,7 @@ namespace GifToMatAnim
                 var texture = TextureEncoder.Encode(Path.GetFileNameWithoutExtension(args[0]) + ".dds", TextureFormat.DDS, composite);
 
                 // Inject into GMD
-                var gmd = ModuleImportUtilities.ImportFile<ModelPack>("./GMD/IT0420_072.GMD");
+                var gmd = ModuleImportUtilities.ImportFile<ModelPack>("./GMD/markspizza_squish.GMD");
                 gmd.Textures.Textures.First().Data = texture.Data;
                 gmd.Textures.Textures.First().Name = texture.Name;
                 gmd.Materials.Materials[0].DiffuseMap.Name = texture.Name;
@@ -83,6 +85,26 @@ namespace GifToMatAnim
                         {
                             switch(v)
                             {
+                                case 2:
+                                    mesh.Mesh.TexCoordsChannel0[v].X = 0.00001f;
+                                    mesh.Mesh.TexCoordsChannel0[v].Y = 0.999999f;
+                                    break;
+                                case 0:
+                                    mesh.Mesh.TexCoordsChannel0[v].X = 0.999999f / targetFrameCount;
+                                    mesh.Mesh.TexCoordsChannel0[v].Y = 0.999999f;
+                                    break;
+                                case 1:
+                                    mesh.Mesh.TexCoordsChannel0[v].X = 0.00001f;
+                                    mesh.Mesh.TexCoordsChannel0[v].Y = 0.00001f;
+                                    break;
+                                case 3:
+                                    mesh.Mesh.TexCoordsChannel0[v].X = 0.999999f / targetFrameCount;
+                                    mesh.Mesh.TexCoordsChannel0[v].Y = 0.00001f;
+                                    break;
+
+                                    /*
+                                     * Computer Monitors
+                                     * 
                                 case 0:
                                     mesh.Mesh.TexCoordsChannel0[v].X = 0.00001f;
                                     mesh.Mesh.TexCoordsChannel0[v].Y = 0.999999f;
@@ -131,6 +153,7 @@ namespace GifToMatAnim
                                     mesh.Mesh.TexCoordsChannel0[v].X = 0.999999f / targetFrameCount;
                                     mesh.Mesh.TexCoordsChannel0[v].Y = 0.00001f;
                                     break;
+                                    */
                             }
                         }
                     }
@@ -143,7 +166,7 @@ namespace GifToMatAnim
                     gmd.AnimationPack.Animations[0].Controllers[0].Layers[0].Keys.Add(new GFDLibrary.Animations.Single5Key()
                     {
                         Time = (duration / targetFrameCount) * (i + 1),
-                        Field00 = (duration / targetFrameCount) * i,
+                        Field00 = (0.999999f / targetFrameCount) * i,
                         Field04 = 0f,
                         Field08 = 1f,
                         Field0C = 1f,
