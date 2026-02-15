@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "GFDPhysicsChunkMaker": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\Users\\ShrineFox\\Downloads\\Chunk Type 000100F9 sumire.yml\""
+    }
+  }
+}

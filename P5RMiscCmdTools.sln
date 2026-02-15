@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11312.210
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateLooseBINs", "CreateLooseBINs\CreateLooseBINs.csproj", "{CA6E1E64-69F9-48FB-8F3E-D9622179A764}"
 EndProject
@@ -68,6 +68,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShadowVoiceEffect", "ShadowVoiceEffect\ShadowVoiceEffect.csproj", "{D02E60C1-F836-44E7-BA62-641527276E2B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFDTexDowngrader", "GFDTexDowngrader\GFDTexDowngrader.csproj", "{571D61E9-E292-45D1-BB4E-8D1E61BA3EAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFDPhysicsChunkMaker", "GFDPhysicsChunkMaker\GFDPhysicsChunkMaker.csproj", "{191818CA-53B5-4CE4-B5F4-8D75B03E5000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P5RCreditsConverter", "P5RCreditsConverter\P5RCreditsConverter.csproj", "{6614D441-3036-4A99-A01B-6A739D772D01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -207,6 +211,14 @@ Global
 		{571D61E9-E292-45D1-BB4E-8D1E61BA3EAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{571D61E9-E292-45D1-BB4E-8D1E61BA3EAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{571D61E9-E292-45D1-BB4E-8D1E61BA3EAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{191818CA-53B5-4CE4-B5F4-8D75B03E5000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{191818CA-53B5-4CE4-B5F4-8D75B03E5000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{191818CA-53B5-4CE4-B5F4-8D75B03E5000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{191818CA-53B5-4CE4-B5F4-8D75B03E5000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6614D441-3036-4A99-A01B-6A739D772D01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6614D441-3036-4A99-A01B-6A739D772D01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6614D441-3036-4A99-A01B-6A739D772D01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6614D441-3036-4A99-A01B-6A739D772D01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

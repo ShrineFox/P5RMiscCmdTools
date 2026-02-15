@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "P5RCreditsConverter": {
+      "commandName": "Project",
+      "commandLineArgs": "\"out.txt\""
+    }
+  }
+}
